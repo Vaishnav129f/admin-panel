@@ -1,6 +1,4 @@
-// src/pages/AdminPanel.js
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   getUsers,
   createUser,
@@ -17,33 +15,34 @@ const AdminPanel = () => {
     password: "",
   });
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const data = await getUsers();
-      setUsers(data);
-    };
-    fetchUsers();
-  }, []);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const fetchUsers = useCallback(async () => {
+    const data = await getUsers();
+    setUsers(data);
+  }, []);
+
   const handleCreateUser = async (e) => {
     e.preventDefault();
-    const newUser = await createUser(formData);
-    setUsers([...users, newUser]);
+    await createUser(formData);
+    fetchUsers();
   };
 
   const handleUpdateUser = async (id) => {
-    const updatedUser = await updateUser(id, formData);
-    setUsers(users.map((user) => (user._id === id ? updatedUser : user)));
+    await updateUser(id, formData);
+    fetchUsers();
   };
 
   const handleDeleteUser = async (id) => {
     await deleteUser(id);
-    setUsers(users.filter((user) => user._id !== id));
+    fetchUsers();
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <div>
@@ -54,24 +53,28 @@ const AdminPanel = () => {
           name="firstName"
           placeholder="First Name"
           onChange={handleChange}
+          value={formData.firstName}
         />
         <input
           type="text"
           name="lastName"
           placeholder="Last Name"
           onChange={handleChange}
+          value={formData.lastName}
         />
         <input
           type="email"
           name="email"
           placeholder="Email"
           onChange={handleChange}
+          value={formData.email}
         />
         <input
           type="password"
           name="password"
           placeholder="Password"
           onChange={handleChange}
+          value={formData.password}
         />
         <button type="submit">Create User</button>
       </form>

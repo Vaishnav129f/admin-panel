@@ -12,7 +12,6 @@ const Login = () => {
   });
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
-  navigate("/path");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

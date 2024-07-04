@@ -24,8 +24,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route
             path="/admin"
-            element={<ProtectedRoute element={AdminPanel} />}
+            element={<ProtectedRoute element={<AdminPanel />} />}
           />
+          <Route path="*" element={<div>Page Not Found</div>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
