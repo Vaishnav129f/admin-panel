@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React from "react";
+// import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
-function App() {
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import AdminPanel from "./pages/AdminPanel";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// import AdminRoute from "./components/AdminRoute";
+// import AdminRoute from "./components/AdminRoute";
+
+import { AuthProvider } from "./store/AuthContext";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<div>Hello</div>} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={<ProtectedRoute element={AdminPanel} />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
-}
+};
 
 export default App;
